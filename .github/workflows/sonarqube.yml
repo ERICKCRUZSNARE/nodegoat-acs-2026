@@ -24,12 +24,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Ejecutar SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v6
+      - name: Cache SonarQube
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Ejecutar analisis SonarQube
+        uses: SonarSource/sonarqube-scan-action@v8.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.organization=erickcruzsnare
-            -Dsonar.projectKey=ERICKCRUZSNARE_nodegoat-acs-2026
-            -Dsonar.sources=app
+
