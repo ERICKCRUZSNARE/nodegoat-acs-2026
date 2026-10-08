@@ -1,0 +1,35 @@
+
+name: Analisis Estatico - SonarQube Cloud
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sonar-analysis:
+    name: Analisis de codigo
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ejecutar SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=erickcruzsnare
+            -Dsonar.projectKey=ERICKCRUZSNARE_nodegoat-acs-2026
+            -Dsonar.sources=app
